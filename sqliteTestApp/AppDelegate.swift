@@ -13,9 +13,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
+    var dbPath = ""
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        //bundle group db -> dbInfo.db copy -> installed dir (document)
+        
+        let arrDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        
+        //first document dir
+        
+        self.dbPath = arrDir[0] + "/dbInfo.db"
+        
+        //need to copy at first time
+        if FileManager.default.fileExists(atPath: self.dbPath) == false{
+            
+            //need to copy
+            let fromBundle = Bundle.main.path(forResource: "dbInfo", ofType: "db")
+            
+            do{
+                try FileManager.default.copyItem(atPath: fromBundle!, toPath: self.dbPath)
+                print("File Copied!")
+            }
+            catch let err as NSError{
+                print(err.localizedDescription)
+            }
+            
+        }
+        else
+        {
+            print("Allready exist")
+        }
+        
+        
+        print(self.dbPath)
+        
+        
         return true
     }
 
